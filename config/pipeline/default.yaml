@@ -1,0 +1,5 @@
+# Pipeline Configuration
+batch_size: 2
+activation_threshold: 1.0
+min_frequency: 0.0001
+context_window: 2048

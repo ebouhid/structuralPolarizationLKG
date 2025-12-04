@@ -1,0 +1,4 @@
+# Model Configuration
+name: "meta-llama/Llama-3.1-8B-Instruct"
+device: "cuda"
+target_layer: 19

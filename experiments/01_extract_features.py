@@ -1,3 +1,5 @@
+import hydra
+from omegaconf import DictConfig
 from src.model_utils import LKGModelWrapper
 from src.data_loader import LKGDataLoader
 import numpy as np
@@ -5,7 +7,6 @@ from pathlib import Path
 from tqdm import tqdm
 import torch
 import pickle
-import yaml
 import sys
 import os
 
@@ -64,25 +65,24 @@ def run_extraction(dataset_name, dataset, model_wrapper, batch_size, output_dir)
         pickle.dump(all_active_features, f)
 
 
-def main():
-    config_path = os.path.join(os.path.dirname(
-        __file__), "../config/experiment.yaml")
-    with open(config_path, 'r') as f:
-        config = yaml.safe_load(f)
+@hydra.main(version_base=None, config_path="../config", config_name="config")
+def main(cfg: DictConfig):
+    # Get original working directory (Hydra changes cwd)
+    orig_cwd = hydra.utils.get_original_cwd()
 
-    output_dir = Path("results/activation_caches")
+    output_dir = Path(orig_cwd) / "results/activation_caches"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print("Initializing Data Loader...")
-    loader = LKGDataLoader(config)
+    loader = LKGDataLoader(cfg)
 
     print("Initializing Model & SAE...")
-    model_wrapper = LKGModelWrapper(config)
+    model_wrapper = LKGModelWrapper(cfg)
 
     print("Preparing Balanced Corpora...")
     neutral_ds, political_ds = loader.prepare_balanced_corpora()
 
-    batch_size = config['pipeline']['batch_size']
+    batch_size = cfg.pipeline.batch_size
 
     run_extraction("neutral", neutral_ds, model_wrapper,
                    batch_size, output_dir)

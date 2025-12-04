@@ -1,0 +1,3 @@
+# SAE Configuration
+release: "data/sae/goodfire_l19"
+id: "blocks.19.hook_resid_post"

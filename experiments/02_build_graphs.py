@@ -1,7 +1,9 @@
+from src.graph_builder import LKGBuilder
+import hydra
+from omegaconf import DictConfig
 import sys
 import os
 import pickle
-import yaml
 import networkx as nx
 from pathlib import Path
 
@@ -10,7 +12,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from src.graph_builder import LKGBuilder
 
 def load_pickle(path):
     print(f"Loading {path}...")
@@ -18,14 +19,13 @@ def load_pickle(path):
         return pickle.load(f)
 
 
-def main():
-    # 1. Load Config
-    config_path = os.path.join(parent_dir, "config/experiment.yaml")
-    with open(config_path, 'r') as f:
-        config = yaml.safe_load(f)
+@hydra.main(version_base=None, config_path="../config", config_name="config")
+def main(cfg: DictConfig):
+    # Get original working directory (Hydra changes cwd)
+    orig_cwd = hydra.utils.get_original_cwd()
 
-    input_dir = Path("results/activation_caches")
-    output_dir = Path("results/graphs")
+    input_dir = Path(orig_cwd) / "results/activation_caches"
+    output_dir = Path(orig_cwd) / "results/graphs"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # 2. Load Features
@@ -51,7 +51,7 @@ def main():
     political_feats = political_feats[:min_len]
 
     # 4. Build Graphs
-    builder = LKGBuilder(config)
+    builder = LKGBuilder(cfg)
 
     # Build Neutral
     print("\n--- Building Neutral LKG ---")

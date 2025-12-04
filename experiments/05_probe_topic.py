@@ -1,9 +1,10 @@
+import hydra
+from omegaconf import DictConfig
 import sys
 import os
 import networkx as nx
 import torch
 import json
-import yaml
 import pandas as pd
 from sae_lens import SAE
 from transformer_lens import HookedTransformer
@@ -58,27 +59,29 @@ def get_top_features_for_prompt(prompt, target_word, model, sae, hook_name, k=3)
     return top_indices.tolist(), top_vals.tolist()
 
 
-def main():
-    # 1. Setup
-    config_path = os.path.join(parent_dir, "config/experiment.yaml")
-    with open(config_path, 'r') as f:
-        config = yaml.safe_load(f)
+@hydra.main(version_base=None, config_path="../config", config_name="config")
+def main(cfg: DictConfig):
+    import time
+    start_time = time.time()
+
+    # Get original working directory (Hydra changes cwd)
+    orig_cwd = hydra.utils.get_original_cwd()
 
     print("Loading Model & SAE...")
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     model = HookedTransformer.from_pretrained(
-        config['model']['name'],
+        cfg.model.name,
         device=device,
         fold_ln=False,
-        dtype=torch.float16
+        dtype="float16"
     )
 
-    sae_path = os.path.join(config['sae']['release'], config['sae']['id'])
+    sae_path = os.path.join(orig_cwd, cfg.sae.release, cfg.sae.id)
     cfg_file = os.path.join(sae_path, "cfg.json")
     if not os.path.exists(cfg_file):
-        sae_path = config['sae']['release']
-        cfg_file = os.path.join(sae_path, config['sae']['id'], "cfg.json")
+        sae_path = os.path.join(orig_cwd, cfg.sae.release)
+        cfg_file = os.path.join(sae_path, cfg.sae.id, "cfg.json")
 
     with open(cfg_file, 'r') as f:
         cfg_dict = json.load(f)
@@ -109,7 +112,7 @@ def main():
         ("The child was very happy with the colorful toy", "colorful"),
     ]
 
-    hook_name = config['sae']['id']
+    hook_name = cfg.sae.id
 
     print("\nRunning Contextual Probes...")
 
@@ -127,8 +130,8 @@ def main():
 
     # 3. Process Graphs
     graphs = [
-        ("neutral", os.path.join(parent_dir, "results/graphs/neutral_lkg.gexf")),
-        ("political", os.path.join(parent_dir, "results/graphs/political_lkg.gexf"))
+        ("neutral", os.path.join(orig_cwd, "results/graphs/neutral_lkg.gexf")),
+        ("political", os.path.join(orig_cwd, "results/graphs/political_lkg.gexf"))
     ]
 
     for graph_name, graph_path in graphs:
@@ -190,13 +193,12 @@ def main():
         print("="*80)
         print(df.to_string(index=False))
         output_csv = os.path.join(
-            parent_dir, f"results/05_probe_topic_results_{graph_name}.csv")
+            orig_cwd, f"results/05_probe_topic_results_{graph_name}.csv")
         df.to_csv(output_csv, index=False)
+
+    end_time = time.time()
+    print(f"\nTotal Execution Time: {end_time - start_time:.2f} seconds")
 
 
 if __name__ == "__main__":
-    import time
-    start_time = time.time()
     main()
-    end_time = time.time()
-    print(f"\nTotal Execution Time: {end_time - start_time:.2f} seconds")

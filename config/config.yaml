@@ -1,0 +1,20 @@
+# @package _global_
+# Hydra Main Config - Structural Polarization LKG
+
+defaults:
+  - model: llama
+  - sae: goodfire_l19
+  - data: political_vs_neutral
+  - pipeline: default
+  - graph: default
+  - _self_
+
+experiment_name: "political_vs_mechanical_topology"
+
+# Hydra specific settings
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}

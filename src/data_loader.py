@@ -1,9 +1,10 @@
 import torch
 from datasets import load_dataset, Dataset, concatenate_datasets
 from transformers import AutoTokenizer
+from omegaconf import DictConfig
 import numpy as np
 import logging
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Union
 
 # Configure logging to track the scientific process
 logging.basicConfig(level=logging.INFO,
@@ -12,27 +13,36 @@ logger = logging.getLogger(__name__)
 
 
 class LKGDataLoader:
-    def __init__(self, config: Dict):
+    def __init__(self, config: Union[DictConfig, Dict]):
         """
         Initializes the loader with experiment config.
 
         Args:
-            config (dict): Configuration dictionary containing:
-                           - model.name: HF model ID for tokenizer
-                           - data.political_path: HF dataset ID
-                           - data.neutral_path: Local path to elevator parquet
-                           - data.topics: List of keywords for filtering
+            config: Configuration (DictConfig or dict) containing:
+                    - model.name: HF model ID for tokenizer
+                    - data.political_path: HF dataset ID
+                    - data.neutral_path: Local path to elevator parquet
+                    - data.topics: List of keywords for filtering
         """
         self.config = config
-        self.tokenizer = AutoTokenizer.from_pretrained(config['model']['name'])
+
+        # Handle both DictConfig and dict access patterns
+        model_name = config.model.name if isinstance(
+            config, DictConfig) else config['model']['name']
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.tokenizer.pad_token = self.tokenizer.eos_token
 
         # Contentious topics as defined in your experimental design [cite: 100, 503]
-        self.keywords = config['data'].get('topics', [
-            "gun control", "abortion", "climate change", "immigration"
-        ])
-
-        self.max_seq_len = config['pipeline'].get('context_window', 2048)
+        if isinstance(config, DictConfig):
+            self.keywords = list(config.data.get('topics', [
+                "gun control", "abortion", "climate change", "immigration"
+            ]))
+            self.max_seq_len = config.pipeline.get('context_window', 2048)
+        else:
+            self.keywords = config['data'].get('topics', [
+                "gun control", "abortion", "climate change", "immigration"
+            ])
+            self.max_seq_len = config['pipeline'].get('context_window', 2048)
 
     def get_token_count(self, dataset: Dataset) -> int:
         """Calculates total token count in a dataset."""
@@ -43,13 +53,14 @@ class LKGDataLoader:
         """
         Loads and tokenizes the neutral control corpus (Elevator Wiki).
         """
-        logger.info(
-            f"Loading neutral corpus from {self.config['data']['neutral_path']}...")
+        neutral_path = self.config.data.neutral_path if isinstance(
+            self.config, DictConfig) else self.config['data']['neutral_path']
+        logger.info(f"Loading neutral corpus from {neutral_path}...")
 
         # Load from local parquet/csv
         # Using 'parquet' engine via datasets library
         dataset = load_dataset(
-            "parquet", data_files=self.config['data']['neutral_path'], split="train")
+            "parquet", data_files=neutral_path, split="train")
 
         # Tokenize immediately to get the baseline count
         logger.info("Tokenizing neutral corpus...")
@@ -73,14 +84,15 @@ class LKGDataLoader:
         """
         Loads LOCAL parquet files, filters, and tokenizes until target count is met.
         """
-        logger.info(
-            f"Loading local political corpus from {self.config['data']['political_path']}...")
+        political_path = self.config.data.political_path if isinstance(
+            self.config, DictConfig) else self.config['data']['political_path']
+        logger.info(f"Loading local political corpus from {political_path}...")
 
         # 1. Load the dataset from local Parquet files
         # This is lazy-loaded (memory mapped), so it won't crash RAM
         dataset = load_dataset(
             "parquet",
-            data_dir=self.config['data']['political_path'],
+            data_dir=political_path,
             split="train"
         )
 

@@ -2,17 +2,24 @@ import numpy as np
 import scipy.sparse as sp
 import networkx as nx
 import logging
+from omegaconf import DictConfig
 from tqdm import tqdm
-from typing import List, Set
+from typing import List, Set, Union, Dict
 
 logger = logging.getLogger(__name__)
 
 
 class LKGBuilder:
-    def __init__(self, config):
+    def __init__(self, config: Union[DictConfig, Dict]):
         self.config = config
-        self.min_cooccurrence = config['graph'].get('min_cooccurrence', 5)
-        self.phi_threshold = config['graph'].get('phi_threshold', 0.05)
+
+        # Handle both DictConfig and dict access patterns
+        if isinstance(config, DictConfig):
+            self.min_cooccurrence = config.graph.get('min_cooccurrence', 5)
+            self.phi_threshold = config.graph.get('phi_threshold', 0.05)
+        else:
+            self.min_cooccurrence = config['graph'].get('min_cooccurrence', 5)
+            self.phi_threshold = config['graph'].get('phi_threshold', 0.05)
 
     def build_graph(self, feature_lists: List[Set[int]], label: str) -> nx.Graph:
         """

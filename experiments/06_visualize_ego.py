@@ -1,8 +1,9 @@
+import hydra
+from omegaconf import DictConfig
 import sys
 import os
 import networkx as nx
 import matplotlib.pyplot as plt
-import yaml
 import json
 import torch
 from sae_lens import SAE
@@ -13,11 +14,11 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
 
-def load_sae_metadata(config):
+def load_sae_metadata(cfg: DictConfig, orig_cwd: str):
     """Load SAE to GPU in Float16."""
-    sae_path = config['sae']['release']
+    sae_path = os.path.join(orig_cwd, cfg.sae.release)
     if not os.path.exists(os.path.join(sae_path, "cfg.json")):
-        sae_path = os.path.join(sae_path, config['sae']['id'])
+        sae_path = os.path.join(sae_path, cfg.sae.id)
 
     cfg_file = os.path.join(sae_path, "cfg.json")
     with open(cfg_file, 'r') as f:
@@ -42,11 +43,10 @@ def load_sae_metadata(config):
     return sae
 
 
-def main():
-    # 1. Configuration
-    config_path = os.path.join(parent_dir, "config/experiment.yaml")
-    with open(config_path, 'r') as f:
-        config = yaml.safe_load(f)
+@hydra.main(version_base=None, config_path="../config", config_name="config")
+def main(cfg: DictConfig):
+    # Get original working directory (Hydra changes cwd)
+    orig_cwd = hydra.utils.get_original_cwd()
 
     # 2. Target Feature
     # Use Feature 58074 (The Semantic Gun Feature)
@@ -55,18 +55,18 @@ def main():
 
     # Prepare output directory
     sanitized_label = TARGET_LABEL.split()[0].lower()
-    output_dir = os.path.join(parent_dir, "results", sanitized_label)
+    output_dir = os.path.join(orig_cwd, "results", sanitized_label)
     os.makedirs(output_dir, exist_ok=True)
 
     # 3. Load Model & SAE (GPU Mode) - Moved up to load once
     print("Loading SAE & Model to GPU (Float16)...")
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    sae = load_sae_metadata(config)
+    sae = load_sae_metadata(cfg, orig_cwd)
 
     from transformer_lens import HookedTransformer
     model = HookedTransformer.from_pretrained(
-        config['model']['name'],
+        cfg.model.name,
         device=device,
         fold_ln=False,
         # FIX: Use float16 on GPU to save VRAM and match SAE
@@ -74,8 +74,8 @@ def main():
     )
 
     graphs = [
-        ("neutral", os.path.join(parent_dir, "results/graphs/neutral_lkg.gexf")),
-        ("polarized", os.path.join(parent_dir, "results/graphs/political_lkg.gexf"))
+        ("neutral", os.path.join(orig_cwd, "results/graphs/neutral_lkg.gexf")),
+        ("polarized", os.path.join(orig_cwd, "results/graphs/political_lkg.gexf"))
     ]
 
     for graph_name, graph_path in graphs:

@@ -28,7 +28,17 @@ This project investigates whether LLMs exhibit measurable structural differences
 ```
 structuralPolarizationLKG/
 ├── config/
-│   └── experiment.yaml           # Experiment configuration
+│   ├── config.yaml               # Main Hydra configuration
+│   ├── model/
+│   │   └── llama.yaml            # Model configuration
+│   ├── sae/
+│   │   └── goodfire_l19.yaml     # SAE configuration
+│   ├── data/
+│   │   └── political_vs_neutral.yaml  # Data paths and topics
+│   ├── pipeline/
+│   │   └── default.yaml          # Pipeline settings
+│   └── graph/
+│       └── default.yaml          # Graph construction params
 ├── data/
 │   ├── congressional_speeches/   # Political corpus (parquet files)
 │   ├── elevator_wiki/            # Neutral corpus
@@ -76,25 +86,43 @@ pip install -r requirements.txt
 
 ### Configuration
 
-Edit `config/experiment.yaml` to adjust:
+This project uses [Hydra](https://hydra.cc/) for configuration management. The configs are modular:
+
+```
+config/
+├── config.yaml           # Main config with defaults
+├── model/llama.yaml      # Model settings
+├── sae/goodfire_l19.yaml # SAE settings
+├── data/political_vs_neutral.yaml  # Data paths
+├── pipeline/default.yaml # Pipeline parameters
+└── graph/default.yaml    # Graph thresholds
+```
+
+#### Override configs at runtime:
+
+```bash
+# Change batch size
+python experiments/01_extract_features.py pipeline.batch_size=4
+
+# Use different phi threshold
+python experiments/02_build_graphs.py graph.phi_threshold=0.1
+
+# Run multirun sweep
+python experiments/02_build_graphs.py --multirun graph.phi_threshold=0.03,0.05,0.1
+```
+
+#### Config structure example (`config/config.yaml`):
 
 ```yaml
-model:
-  name: "meta-llama/Llama-3.1-8B-Instruct"
-  device: "cuda"
-  target_layer: 19          # Layer to hook for SAE
+defaults:
+  - model: llama
+  - sae: goodfire_l19
+  - data: political_vs_neutral
+  - pipeline: default
+  - graph: default
+  - _self_
 
-sae:
-  release: "data/sae/goodfire_l19"
-  id: "blocks.19.hook_resid_post"
-
-data:
-  topics: ["gun control", "abortion", "climate change", "immigration"]
-  max_tokens: 2000000       # Token budget for each corpus
-
-graph:
-  phi_threshold: 0.05       # Minimum Phi coefficient for edge creation
-  min_cooccurrence: 5       # Minimum co-occurrence count
+experiment_name: "political_vs_mechanical_topology"
 ```
 
 ### Running the Pipeline
@@ -192,3 +220,5 @@ Computes network science metrics:
 | `scipy` | Sparse matrix operations |
 | `torch` | Deep learning backend |
 | `datasets` | HuggingFace data loading |
+| `hydra-core` | Configuration management |
+| `omegaconf` | Config objects |

@@ -1,0 +1,3 @@
+# Graph Configuration
+phi_threshold: 0.05
+min_cooccurrence: 5
