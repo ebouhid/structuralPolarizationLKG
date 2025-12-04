@@ -1,0 +1,21 @@
+# Core ML & Tensors
+torch>=2.2.0
+numpy
+scipy                       # Critical for Sparse Matrix operations [cite: 205]
+
+# LLM & Interpretability
+transformer_lens            # For hooking into the residual stream [cite: 114]
+sae_lens                    # For loading pre-trained SAEs (Goodfire/EleutherAI) [cite: 116]
+datasets                    # HuggingFace datasets for efficient text handling [cite: 207]
+accelerate                  # For efficient GPU offloading
+
+# Graph & Network Science
+networkx                    # Basic graph data structures [cite: 212]
+cdlib                       # Community Detection Library (Louvain/Leiden) [cite: 212]
+python-louvain              # Specific implementation for modularity
+
+# Utilities
+tqdm                        # Progress bars (crucial for long inference runs)
+hydra-core                  # For config management
+matplotlib                  # For plotting degree distributions
+

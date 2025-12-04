@@ -1,0 +1,10 @@
+.venv
+__pycache__/
+.python-version
+*.zip
+.env
+results/
+._*
+.DS_Store
+data/
+.github/
