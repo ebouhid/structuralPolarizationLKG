@@ -1,0 +1,14 @@
+# Data Configuration
+political_path: "data/congressional_speeches"
+neutral_path: "data/elevator_wiki/train.parquet"
+
+# Sampling strategy: "first" (oldest), "last" (most recent), or "random"
+sampling_strategy: "last"
+
+topics:
+  - "gun control"
+  - "abortion"
+  - "climate change"
+  - "immigration"
+
+max_tokens: 2000000
