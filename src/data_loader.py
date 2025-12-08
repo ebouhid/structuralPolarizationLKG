@@ -80,9 +80,16 @@ class LKGDataLoader:
             f"Neutral Corpus Loaded: {len(dataset)} rows, {total_tokens} tokens.")
         return dataset, total_tokens
 
-    def load_political_corpus(self, target_token_count: int) -> Dataset:
+    def load_political_corpus(self, target_token_count: int, sampling_strategy: str = "first") -> Dataset:
         """
         Loads LOCAL parquet files, filters, and tokenizes until target count is met.
+
+        Args:
+            target_token_count: Number of tokens to accumulate.
+            sampling_strategy: How to select entries from the filtered dataset.
+                - "first": Take entries from the beginning (oldest, assuming chronological order)
+                - "last": Take entries from the end (most recent)
+                - "random": Randomly sample entries
         """
         political_path = self.config.data.political_path if isinstance(
             self.config, DictConfig) else self.config['data']['political_path']
@@ -113,7 +120,23 @@ class LKGDataLoader:
 
         logger.info(f"Filtered rows matching topics: {len(filtered_dataset)}")
 
-        # 3. Tokenize and Accumulate
+        # 3. Apply sampling strategy
+        if sampling_strategy == "random":
+            # Shuffle the dataset for random sampling
+            filtered_dataset = filtered_dataset.shuffle(seed=42)
+            logger.info("Using RANDOM sampling strategy (shuffled dataset)")
+        elif sampling_strategy == "last":
+            # Reverse the indices to get most recent entries first
+            indices = list(range(len(filtered_dataset) - 1, -1, -1))
+            filtered_dataset = filtered_dataset.select(indices)
+            logger.info("Using LAST (most recent) sampling strategy")
+        elif sampling_strategy == "first":
+            logger.info("Using FIRST (oldest) sampling strategy")
+        else:
+            raise ValueError(
+                f"Unknown sampling_strategy: {sampling_strategy}. Use 'first', 'last', or 'random'.")
+
+        # 4. Tokenize and Accumulate
         accumulated_data = []
         current_tokens = 0
         batch_size = 1000
@@ -156,17 +179,21 @@ class LKGDataLoader:
         logger.info(f"Final accumulated tokens: {current_tokens}")
         return concatenate_datasets(accumulated_data)
 
-    def prepare_balanced_corpora(self):
+    def prepare_balanced_corpora(self, sampling_strategy: str = "first"):
         """
         Orchestrates the loading and balancing.
         Returns two datasets of EQUAL token counts.
+
+        Args:
+            sampling_strategy: How to select political entries - "first", "last", or "random"
         """
         # 1. Load Neutral (The Anchor)
         neutral_ds, neutral_tokens = self.load_elevator_corpus()
 
         # 2. Load Political (The Variable) matched to Neutral
         political_ds = self.load_political_corpus(
-            target_token_count=neutral_tokens)
+            target_token_count=neutral_tokens,
+            sampling_strategy=sampling_strategy)
 
         # 3. Strict Truncation
         # Even with loop, political might be slightly larger. We must truncate exactly.

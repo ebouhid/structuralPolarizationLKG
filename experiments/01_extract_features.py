@@ -1,3 +1,9 @@
+import sys
+import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
 import hydra
 from omegaconf import DictConfig
 from src.model_utils import LKGModelWrapper
@@ -7,12 +13,6 @@ from pathlib import Path
 from tqdm import tqdm
 import torch
 import pickle
-import sys
-import os
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
 
 
 def pad_and_tensorize(batch_input_ids, pad_token_id, device):
@@ -80,7 +80,9 @@ def main(cfg: DictConfig):
     model_wrapper = LKGModelWrapper(cfg)
 
     print("Preparing Balanced Corpora...")
-    neutral_ds, political_ds = loader.prepare_balanced_corpora()
+    sampling_strategy = cfg.data.get("sampling_strategy", "first")
+    neutral_ds, political_ds = loader.prepare_balanced_corpora(
+        sampling_strategy=sampling_strategy)
 
     batch_size = cfg.pipeline.batch_size
 
