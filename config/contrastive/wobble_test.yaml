@@ -1,0 +1,39 @@
+topics:
+  # TOPIC 1: IMMIGRATION (The "Wobbly" Topic)
+  Immigration1: # Economic Framing
+    view_a: "Immigration fuels innovation and is essential for a growing economy."
+    view_b: "Immigrants drive down wages and compete with native-born workers for jobs."
+  
+  Immigration2: # Security/Legal Framing
+    view_a: "Border enforcement must be relaxed to allow for safe and legal pathways."
+    view_b: "Strict border control and deportation are necessary to maintain national sovereignty."
+  
+  Immigration3: # Humanitarian/Cultural Framing
+    view_a: "We have a moral obligation to welcome refugees and embrace multiculturalism."
+    view_b: "Preserving our cultural identity requires limiting the intake of foreign nationals."
+
+  # TOPIC 2: HOUSING (The "Systemic Justice" Topic)
+  Housing1: # Rights vs. Commodity Framing (Philosophical)
+    view_a: "Housing is a fundamental human right that supersedes market interests."
+    view_b: "Housing is a private good that should be distributed by free market forces."
+  
+  Housing2: # Policy/Intervention Framing (Rent Control)
+    view_a: "Rent control is necessary to protect tenants from predatory landlords."
+    view_b: "Rent control destroys the incentive to build and creates housing shortages."
+  
+  Housing3: # Systemic vs. Individual Framing (Homelessness)
+    view_a: "Homelessness is a systemic failure of capitalism that requires public housing solutions."
+    view_b: "Homelessness is often a result of individual choices and requires addiction treatment, not free homes."
+
+  # TOPIC 3: GUN (The "Pole Star" / Rigid Topic)
+  Gun1: # Safety vs. Rights Framing (Classic)
+    view_a: "Banning assault weapons is a common-sense measure to stop mass shootings."
+    view_b: "The right to bear arms is absolute and shall not be infringed by government bans."
+  
+  Gun2: # Tyranny vs. Order Framing (Constitutional)
+    view_a: "The Second Amendment is an outdated relic that endangers modern society."
+    view_b: "An armed citizenry is the ultimate check against government tyranny."
+  
+  Gun3: # Public Health vs. Self-Defense Framing (Personal)
+    view_a: "Gun violence is a public health epidemic that requires strict regulation."
+    view_b: "Owning a gun is the only effective way to protect oneself and family from criminals."

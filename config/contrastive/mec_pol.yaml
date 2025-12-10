@@ -1,0 +1,60 @@
+topics:
+  Gun:
+    mechanical: "The gun is made of metal components."
+    political: "The gun rights are a constitutional issue."
+  
+  Abortion:
+    mechanical: "The abortion is a medical procedure."
+    political: "The abortion ban is a violation of rights."
+  
+  Climate:
+    mechanical: "The climate is determined by weather patterns."
+    political: "The climate crisis requires urgent action."
+  
+  Maria da Penha:
+    mechanical: "The Maria da Penha law was created to combat domestic violence."
+    political: "The Maria da Penha law favors women at the expense of men."
+  
+  Wage Gap:
+    mechanical: "The data indicates a difference in average earnings between men and women."
+    political: "The wage gap is evidence of systemic discrimination against women."
+  
+  Immigration:
+    mechanical: "Immigration is the movement of people across national borders."
+    political: "Immigration threatens our national sovereignty and job security."
+  
+  LGBTQ+ Rights:
+    mechanical: "Sexual orientation and gender identity are biological variations."
+    political: "LGBTQ+ people deserve equal rights and legal recognition."
+  
+  Healthcare:
+    mechanical: "Healthcare involves diagnosis and treatment of medical conditions."
+    political: "Universal healthcare is a fundamental right, not a commodity."
+  
+  Criminal Justice:
+    mechanical: "Sentencing is determined by criminal codes and precedent."
+    political: "Mass incarceration is a tool of systemic racism."
+  
+  Education:
+    mechanical: "Education involves the teaching of academic subjects and skills."
+    political: "Critical race theory attacks our heritage and indoctrinates children."
+  
+  Drug Policy:
+    mechanical: "Drugs are chemical compounds with specific pharmacological effects."
+    political: "Drug legalization is the only way to end the war on drugs."
+  
+  Housing:
+    mechanical: "Housing is a building structure that provides shelter."
+    political: "Homelessness reflects the failure of capitalist inequality."
+  
+  Wealth Redistribution:
+    mechanical: "Markets distribute resources through supply and demand mechanisms."
+    political: "Taxation of the rich is necessary to fight inequality."
+  
+  Free Speech:
+    mechanical: "Speech is the communication of ideas through language."
+    political: "Free speech must be absolute or it becomes a tool of oppression."
+  
+  Police Reform:
+    mechanical: "Police departments enforce laws and maintain public order."
+    political: "Defunding police is essential to creating a fair society."

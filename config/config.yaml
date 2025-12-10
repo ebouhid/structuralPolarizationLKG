@@ -7,6 +7,7 @@ defaults:
   - data: political_vs_neutral
   - pipeline: default
   - graph: default
+  - contrastive: mec_pol
   - _self_
 
 experiment_name: "political_vs_mechanical_topology"
