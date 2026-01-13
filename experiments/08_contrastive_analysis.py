@@ -80,6 +80,10 @@ def main(cfg: DictConfig):
         key_m, key_p = 'view_a', 'view_b'
         label_m, label_p = 'View A', 'View B'
         short_m, short_p = 'A', 'B'
+    elif 'left' in first_topic and 'right' in first_topic:
+        key_m, key_p = 'left', 'right'
+        label_m, label_p = 'Left', 'Right'
+        short_m, short_p = 'L', 'R'
     else:
         # Fallback: take first two keys sorted
         keys = sorted(list(first_topic.keys()))

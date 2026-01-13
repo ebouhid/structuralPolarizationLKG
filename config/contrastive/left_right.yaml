@@ -1,60 +1,60 @@
 topics:
   Gun:
-    view_a: "Stricter gun control laws are necessary to save lives and reduce violence."
-    view_b: "Gun ownership is a fundamental individual right that guarantees personal safety."
+    left: "Stricter gun control laws are necessary to save lives and reduce violence."
+    right: "Gun ownership is a fundamental individual right that guarantees personal safety."
   
   Abortion:
-    view_a: "Abortion is a fundamental healthcare right that ensures bodily autonomy."
-    view_b: "Abortion is the termination of a human life and must be legally prohibited."
+    left: "Abortion is a fundamental healthcare right that ensures bodily autonomy."
+    right: "Abortion is the termination of a human life and must be legally prohibited."
   
   Climate:
-    view_a: "The climate crisis is an existential threat that requires immediate radical action."
-    view_b: "Climate change policies are economic disasters based on exaggerated models."
+    left: "The climate crisis is an existential threat that requires immediate radical action."
+    right: "Climate change policies are economic disasters based on exaggerated models."
   
   Maria da Penha:
-    view_a: "The Maria da Penha law is a crucial instrument to protect women from systemic violence."
-    view_b: "The Maria da Penha law is unconstitutional because it violates the principle of equality by discriminating against men."
+    left: "The Maria da Penha law is a crucial instrument to protect women from systemic violence."
+    right: "The Maria da Penha law is unconstitutional because it violates the principle of equality by discriminating against men."
   
   Wage Gap:
-    view_a: "The gender wage gap is clear evidence of systemic discrimination against women."
-    view_b: "The wage gap is a myth resulting from individual career choices rather than sexism."
+    left: "The gender wage gap is clear evidence of systemic discrimination against women."
+    right: "The wage gap is a myth resulting from individual career choices rather than sexism."
   
   Immigration:
-    view_a: "Immigration strengthens our economy and enriches our cultural diversity."
-    view_b: "Mass immigration threatens national security and strains our social resources."
+    left: "Immigration strengthens our economy and enriches our cultural diversity."
+    right: "Mass immigration threatens national security and strains our social resources."
   
   LGBTQ+ Rights:
-    view_a: "LGBTQ+ rights are human rights and gender identity must be protected by law."
-    view_b: "Traditional family values are being undermined by the promotion of gender ideology."
+    left: "LGBTQ+ rights are human rights and gender identity must be protected by law."
+    right: "Traditional family values are being undermined by the promotion of gender ideology."
   
   Healthcare:
-    view_a: "Healthcare is a human right that the government must provide freely to everyone."
-    view_b: "Privatized healthcare ensures higher quality and efficiency through free market competition."
+    left: "Healthcare is a human right that the government must provide freely to everyone."
+    right: "Privatized healthcare ensures higher quality and efficiency through free market competition."
   
   Criminal Justice:
-    view_a: "The justice system is systemically racist and requires deep structural reform."
-    view_b: "Strict sentencing and strong policing are the only ways to ensure law and order."
+    left: "The justice system is systemically racist and requires deep structural reform."
+    right: "Strict sentencing and strong policing are the only ways to ensure law and order."
   
   Education:
-    view_a: "Schools must teach the history of systemic racism to create a more just society."
-    view_b: "Schools should focus on core academics and stop indoctrinating children with political agendas."
+    left: "Schools must teach the history of systemic racism to create a more just society."
+    right: "Schools should focus on core academics and stop indoctrinating children with political agendas."
   
   Drug Policy:
-    view_a: "Decriminalizing drugs is the only effective way to reduce harm and dismantle cartels."
-    view_b: "Legalizing drugs will lead to moral decay and a public health crisis of addiction."
+    left: "Decriminalizing drugs is the only effective way to reduce harm and dismantle cartels."
+    right: "Legalizing drugs will lead to moral decay and a public health crisis of addiction."
   
   Housing:
-    view_a: "Housing is a universal human right and the state must guarantee shelter for all."
-    view_b: "Housing is a commodity and market deregulation is the best solution to lower costs."
+    left: "Housing is a universal human right and the state must guarantee shelter for all."
+    right: "Housing is a commodity and market deregulation is the best solution to lower costs."
   
   Wealth Redistribution:
-    view_a: "Taxing the rich to redistribute wealth is necessary to fix inequality."
-    view_b: "Forced redistribution of wealth punishes success and destroys economic motivation."
+    left: "Taxing the rich to redistribute wealth is necessary to fix inequality."
+    right: "Forced redistribution of wealth punishes success and destroys economic motivation."
   
   Free Speech:
-    view_a: "Hate speech must be regulated to prevent harm to vulnerable minority groups."
-    view_b: "Free speech must be absolute and include the right to say things others find offensive."
+    left: "Hate speech must be regulated to prevent harm to vulnerable minority groups."
+    right: "Free speech must be absolute and include the right to say things others find offensive."
   
   Police Reform:
-    view_a: "We must defund the police and invest those resources in community support."
-    view_b: "Increasing police funding and presence is essential to restore safety in our cities."
+    left: "We must defund the police and invest those resources in community support."
+    right: "Increasing police funding and presence is essential to restore safety in our cities."
